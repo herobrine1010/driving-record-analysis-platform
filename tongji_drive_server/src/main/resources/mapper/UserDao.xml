@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.UserDao">
+
+    <resultMap type="com.example.demo.entity.User" id="UserMap">
+        <result property="id" column="ID" jdbcType="INTEGER"/>
+        <result property="username" column="USERNAME" jdbcType="VARCHAR"/>
+        <result property="pwd" column="PWD" jdbcType="VARCHAR"/>
+        <result property="auth" column="AUTH" jdbcType="INTEGER"/>
+        <result property="tel" column="TEL" jdbcType="VARCHAR"/>
+        <result property="email" column="EMAIL" jdbcType="VARCHAR"/>
+        <result property="info" column="INFO" jdbcType="VARCHAR"/>
+        <result property="gender" column="GENDER" jdbcType="INTEGER"/>
+        <result property="avatar" column="AVATAR" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="UserMap">
+        select
+          ID, USERNAME, PWD, AUTH, TEL, EMAIL, INFO, GENDER, AVATAR
+        from drive.user
+        where ID = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="UserMap">
+        select
+          ID, USERNAME, PWD, AUTH, TEL, EMAIL, INFO, GENDER, AVATAR
+        from drive.user
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="UserMap">
+        select
+          ID, USERNAME, PWD, AUTH, TEL, EMAIL, INFO, GENDER, AVATAR
+        from drive.user
+        <where>
+            <if test="id != null">
+                and ID = #{id}
+            </if>
+            <if test="username != null and username != ''">
+                and USERNAME = #{username}
+            </if>
+            <if test="pwd != null and pwd != ''">
+                and PWD = #{pwd}
+            </if>
+            <if test="auth != null">
+                and AUTH = #{auth}
+            </if>
+            <if test="tel != null and tel != ''">
+                and TEL = #{tel}
+            </if>
+            <if test="email != null and email != ''">
+                and EMAIL = #{email}
+            </if>
+            <if test="info != null and info != ''">
+                and INFO = #{info}
+            </if>
+            <if test="gender != null">
+                and GENDER = #{gender}
+            </if>
+            <if test="avatar != null and avatar != ''">
+                and AVATAR = #{avatar}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into drive.user(USERNAME, PWD, AUTH, TEL, EMAIL, INFO, GENDER, AVATAR)
+        values (#{username}, #{pwd}, #{auth}, #{tel}, #{email}, #{info}, #{gender}, #{avatar})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update drive.user
+        <set>
+            <if test="username != null and username != ''">
+                USERNAME = #{username},
+            </if>
+            <if test="pwd != null and pwd != ''">
+                PWD = #{pwd},
+            </if>
+            <if test="auth != null">
+                AUTH = #{auth},
+            </if>
+            <if test="tel != null and tel != ''">
+                TEL = #{tel},
+            </if>
+            <if test="email != null and email != ''">
+                EMAIL = #{email},
+            </if>
+            <if test="info != null and info != ''">
+                INFO = #{info},
+            </if>
+            <if test="gender != null">
+                GENDER = #{gender},
+            </if>
+            <if test="avatar != null and avatar != ''">
+                AVATAR = #{avatar},
+            </if>
+        </set>
+        where ID = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from drive.user where ID = #{id}
+    </delete>
+
+</mapper>

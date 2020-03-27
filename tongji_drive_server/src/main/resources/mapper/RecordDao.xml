@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.RecordDao">
+
+    <resultMap type="com.example.demo.entity.Record" id="RecordMap">
+        <result property="id" column="ID" jdbcType="INTEGER"/>
+        <result property="alias" column="ALIAS" jdbcType="VARCHAR"/>
+        <result property="csvPath" column="CSV_PATH" jdbcType="VARCHAR"/>
+        <result property="video1Path" column="VIDEO1_PATH" jdbcType="VARCHAR"/>
+        <result property="video2Path" column="VIDEO2_PATH" jdbcType="VARCHAR"/>
+        <result property="rating" column="RATING" jdbcType="OTHER"/>
+        <result property="comment" column="COMMENT" jdbcType="VARCHAR"/>
+        <result property="status" column="STATUS" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="RecordMap">
+        select
+          ID, ALIAS, CSV_PATH, VIDEO1_PATH, VIDEO2_PATH, RATING, COMMENT, STATUS
+        from drive.record
+        where ID = #{id}
+    </select>
+
+    <select id="findRecordGenerated" resultMap="RecordMap">
+        select
+          drive.record.ID, ALIAS, CSV_PATH, VIDEO1_PATH, VIDEO2_PATH, RATING, COMMENT, STATUS
+        from drive.record join drive.uploads on drive.record.id=drive.uploads.record_id where user_id= #{id} and status="generated" LIMIT 1;
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="RecordMap">
+        select
+          ID, ALIAS, CSV_PATH, VIDEO1_PATH, VIDEO2_PATH, RATING, COMMENT, STATUS
+        from drive.record
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="RecordMap">
+        select
+          ID, ALIAS, CSV_PATH, VIDEO1_PATH, VIDEO2_PATH, RATING, COMMENT, STATUS
+        from drive.record
+        <where>
+            <if test="id != null">
+                and ID = #{id}
+            </if>
+            <if test="alias != null and alias != ''">
+                and ALIAS = #{alias}
+            </if>
+            <if test="csvPath != null and csvPath != ''">
+                and CSV_PATH = #{csvPath}
+            </if>
+            <if test="video1Path != null and video1Path != ''">
+                and VIDEO1_PATH = #{video1Path}
+            </if>
+            <if test="video2Path != null and video2Path != ''">
+                and VIDEO2_PATH = #{video2Path}
+            </if>
+            <if test="rating != null">
+                and RATING = #{rating}
+            </if>
+            <if test="comment != null and comment != ''">
+                and COMMENT = #{comment}
+            </if>
+            <if test="status != null and status != ''">
+                and STATUS = #{status}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into drive.record(ALIAS, CSV_PATH, VIDEO1_PATH, VIDEO2_PATH, RATING, COMMENT, STATUS)
+        values (#{alias}, #{csvPath}, #{video1Path}, #{video2Path}, #{rating}, #{comment}, #{status})
+    </insert>
+
+    <insert id="rawInsert" keyProperty="id" useGeneratedKeys="true">
+        insert into drive.record values ()
+    </insert>
+    <!--通过主键修改数据-->
+    <update id="update">
+        update drive.record
+        <set>
+            <if test="alias != null and alias != ''">
+                ALIAS = #{alias},
+            </if>
+            <if test="csvPath != null and csvPath != ''">
+                CSV_PATH = #{csvPath},
+            </if>
+            <if test="video1Path != null and video1Path != ''">
+                VIDEO1_PATH = #{video1Path},
+            </if>
+            <if test="video2Path != null and video2Path != ''">
+                VIDEO2_PATH = #{video2Path},
+            </if>
+            <if test="rating != null">
+                RATING = #{rating},
+            </if>
+            <if test="comment != null and comment != ''">
+                COMMENT = #{comment},
+            </if>
+            <if test="status != null and status != ''">
+                STATUS = #{status},
+            </if>
+        </set>
+        where ID = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from drive.record where ID = #{id}
+    </delete>
+
+
+
+</mapper>

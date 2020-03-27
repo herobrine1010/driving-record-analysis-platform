@@ -1,0 +1,45 @@
+package com.example.demo.entity;
+
+import java.io.Serializable;
+
+/**
+ * (IsOfGroup)实体类
+ *
+ * @author makejava
+ * @since 2020-03-05 20:54:04
+ */
+public class IsOfGroup implements Serializable {
+    private static final long serialVersionUID = -71792188525134308L;
+    
+    private Integer id;
+    
+    private Integer userId;
+    
+    private Integer groupId;
+
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public Integer getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Integer groupId) {
+        this.groupId = groupId;
+    }
+
+}
